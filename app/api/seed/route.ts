@@ -3,6 +3,8 @@ import connectToDatabase from "@/lib/mongodb"
 import Course from "@/models/Course"
 import Testimonial from "@/models/Testimonial"
 
+export const dynamic = "force-dynamic"
+
 // This endpoint will seed the database with initial data
 export async function GET() {
   try {

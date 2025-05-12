@@ -4,6 +4,8 @@ import Course from "@/models/Course"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
+export const dynamic = "force-dynamic"
+
 // Get all courses
 export async function GET(req: NextRequest) {
   try {

@@ -4,6 +4,8 @@ import Lead from "@/models/Lead"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
+export const dynamic = "force-dynamic"
+
 // Get all leads
 export async function GET(req: NextRequest) {
   try {

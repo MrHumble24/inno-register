@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import Link from "next/link"
 import { ArrowRight, BookOpen, Globe, GraduationCap, Users } from "lucide-react"
 
@@ -6,38 +5,62 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import RegistrationForm from "@/components/registration-form"
 
-async function getCourses() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/courses`, {
-      next: { revalidate: 60 },
-      cache: "no-store",
-    })
-    if (!res.ok) {
-      return []
-    }
-    return res.json()
-  } catch (error) {
-    console.error("Error fetching courses:", error)
-    return []
-  }
-}
+// Mock data for static rendering
+const FALLBACK_COURSES = [
+  {
+    _id: "course1",
+    title: "Beginner English",
+    description:
+      "Perfect for those starting their English language journey. Focus on basic vocabulary and simple conversations.",
+    color: "blue",
+    order: 0,
+  },
+  {
+    _id: "course2",
+    title: "Intermediate English",
+    description:
+      "Build on your foundation with more complex grammar, expanded vocabulary, and practical conversation skills.",
+    color: "green",
+    order: 1,
+  },
+  {
+    _id: "course3",
+    title: "Advanced English",
+    description:
+      "Perfect your English with advanced grammar, idiomatic expressions, and professional communication skills.",
+    color: "purple",
+    order: 2,
+  },
+]
 
-async function getTestimonials() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/testimonials`, {
-      next: { revalidate: 60 },
-      cache: "no-store",
-    })
-    if (!res.ok) {
-      return []
-    }
-    return res.json()
-  } catch (error) {
-    console.error("Error fetching testimonials:", error)
-    return []
-  }
-}
+const FALLBACK_TESTIMONIALS = [
+  {
+    _id: "testimonial1",
+    name: "John Doe",
+    course: "Beginner Course",
+    text: "The teaching methods at Innovative Centre made learning English enjoyable and effective. I've made significant progress in just a few months.",
+    initials: "JD",
+    order: 0,
+  },
+  {
+    _id: "testimonial2",
+    name: "Jane Smith",
+    course: "Intermediate Course",
+    text: "The small class sizes and personalized attention helped me overcome my fear of speaking English. Now I feel confident in my communication skills.",
+    initials: "JS",
+    order: 1,
+  },
+  {
+    _id: "testimonial3",
+    name: "Robert Johnson",
+    course: "Advanced Course",
+    text: "Thanks to Innovative Centre, I was able to pass my English proficiency exam with flying colors. The instructors are knowledgeable and supportive.",
+    initials: "RJ",
+    order: 2,
+  },
+]
 
+// Client component for dynamic data fetching
 function CourseCard({ course }: { course: any }) {
   const getGradient = (color: string) => {
     switch (color) {
@@ -91,9 +114,10 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
   )
 }
 
-export default async function Home() {
-  const courses = (await getCourses()) || []
-  const testimonials = (await getTestimonials()) || []
+export default function Home() {
+  // Use fallback data for static rendering
+  const courses = FALLBACK_COURSES
+  const testimonials = FALLBACK_TESTIMONIALS
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -257,13 +281,9 @@ export default async function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-12 md:grid-cols-3">
-              <Suspense fallback={<p className="text-center col-span-3">Loading courses...</p>}>
-                {courses.length === 0 ? (
-                  <p className="text-center col-span-3">No courses available at the moment. Check back soon!</p>
-                ) : (
-                  courses.map((course: any) => <CourseCard key={course._id} course={course} />)
-                )}
-              </Suspense>
+              {courses.map((course) => (
+                <CourseCard key={course._id} course={course} />
+              ))}
             </div>
           </div>
         </section>
@@ -284,15 +304,9 @@ export default async function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
-              <Suspense fallback={<p className="text-center col-span-3">Loading testimonials...</p>}>
-                {testimonials.length === 0 ? (
-                  <p className="text-center col-span-3">No testimonials available at the moment. Check back soon!</p>
-                ) : (
-                  testimonials.map((testimonial: any) => (
-                    <TestimonialCard key={testimonial._id} testimonial={testimonial} />
-                  ))
-                )}
-              </Suspense>
+              {testimonials.map((testimonial) => (
+                <TestimonialCard key={testimonial._id} testimonial={testimonial} />
+              ))}
             </div>
           </div>
         </section>

@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "@/components/ui/use-toast"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -28,6 +29,8 @@ const formSchema = z.object({
 
 export default function RegistrationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,6 +43,8 @@ export default function RegistrationForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true)
+    setError(null)
+    setSuccess(false)
 
     try {
       const response = await fetch("/api/leads", {
@@ -54,12 +59,14 @@ export default function RegistrationForm() {
         throw new Error("Failed to submit form")
       }
 
+      setSuccess(true)
       toast({
         title: "Registration submitted!",
         description: "We'll contact you shortly to discuss your language learning journey.",
       })
       form.reset()
     } catch (error) {
+      setError("There was a problem submitting your registration. Please try again.")
       toast({
         title: "Error",
         description: "There was a problem submitting your registration. Please try again.",
@@ -77,6 +84,18 @@ export default function RegistrationForm() {
         <p className="text-sm text-gray-500 text-center mb-6">
           Sign up today to start your premium language learning journey
         </p>
+
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {success && (
+          <Alert className="mb-4 bg-green-50 border-green-200 text-green-800">
+            <AlertDescription>Registration submitted successfully! We'll contact you shortly.</AlertDescription>
+          </Alert>
+        )}
 
         <FormField
           control={form.control}

@@ -1,8 +1,50 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import AdminLayout from "@/components/admin/admin-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, BookOpen, MessageSquare } from "lucide-react"
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState({
+    leads: "Loading...",
+    courses: "Loading...",
+    testimonials: "Loading...",
+  })
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // Fetch leads count
+        const leadsRes = await fetch("/api/leads")
+        const leadsData = await leadsRes.json()
+
+        // Fetch courses count
+        const coursesRes = await fetch("/api/courses")
+        const coursesData = await coursesRes.json()
+
+        // Fetch testimonials count
+        const testimonialsRes = await fetch("/api/testimonials")
+        const testimonialsData = await testimonialsRes.json()
+
+        setStats({
+          leads: leadsData.length.toString(),
+          courses: coursesData.length.toString(),
+          testimonials: testimonialsData.length.toString(),
+        })
+      } catch (error) {
+        console.error("Error fetching stats:", error)
+        setStats({
+          leads: "Error",
+          courses: "Error",
+          testimonials: "Error",
+        })
+      }
+    }
+
+    fetchStats()
+  }, [])
+
   return (
     <AdminLayout>
       <div className="space-y-6">
@@ -18,7 +60,7 @@ export default function AdminDashboard() {
               <Users className="w-4 h-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Loading...</div>
+              <div className="text-2xl font-bold">{stats.leads}</div>
               <p className="text-xs text-gray-500">Manage your leads</p>
             </CardContent>
           </Card>
@@ -28,7 +70,7 @@ export default function AdminDashboard() {
               <BookOpen className="w-4 h-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Loading...</div>
+              <div className="text-2xl font-bold">{stats.courses}</div>
               <p className="text-xs text-gray-500">Manage your courses</p>
             </CardContent>
           </Card>
@@ -38,7 +80,7 @@ export default function AdminDashboard() {
               <MessageSquare className="w-4 h-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Loading...</div>
+              <div className="text-2xl font-bold">{stats.testimonials}</div>
               <p className="text-xs text-gray-500">Manage your testimonials</p>
             </CardContent>
           </Card>

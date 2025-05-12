@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [email, setEmail] = useState(process.env.ADMIN_EMAIL || "")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -43,6 +43,8 @@ export default function LoginPage() {
     setError("")
 
     try {
+      const callbackUrl = searchParams.get("callbackUrl") || "/admin"
+
       const result = await signIn("credentials", {
         redirect: false,
         email,
@@ -55,7 +57,7 @@ export default function LoginPage() {
         return
       }
 
-      router.push("/admin")
+      router.push(callbackUrl)
     } catch (error) {
       setError("An error occurred. Please try again.")
       setIsLoading(false)

@@ -4,6 +4,8 @@ import Testimonial from "@/models/Testimonial"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 
+export const dynamic = "force-dynamic"
+
 // Get all testimonials
 export async function GET(req: NextRequest) {
   try {
