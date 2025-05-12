@@ -1,124 +1,13 @@
 import Link from "next/link"
-import { ArrowRight, BookOpen, Globe, GraduationCap, Users } from "lucide-react"
+import { ArrowRight, Globe, GraduationCap, Users } from "lucide-react"
+import { Suspense } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import RegistrationForm from "@/components/registration-form"
-
-// Mock data for static rendering
-const FALLBACK_COURSES = [
-  {
-    _id: "course1",
-    title: "Beginner English",
-    description:
-      "Perfect for those starting their English language journey. Focus on basic vocabulary and simple conversations.",
-    color: "blue",
-    order: 0,
-  },
-  {
-    _id: "course2",
-    title: "Intermediate English",
-    description:
-      "Build on your foundation with more complex grammar, expanded vocabulary, and practical conversation skills.",
-    color: "green",
-    order: 1,
-  },
-  {
-    _id: "course3",
-    title: "Advanced English",
-    description:
-      "Perfect your English with advanced grammar, idiomatic expressions, and professional communication skills.",
-    color: "purple",
-    order: 2,
-  },
-]
-
-const FALLBACK_TESTIMONIALS = [
-  {
-    _id: "testimonial1",
-    name: "John Doe",
-    course: "Beginner Course",
-    text: "The teaching methods at Innovative Centre made learning English enjoyable and effective. I've made significant progress in just a few months.",
-    initials: "JD",
-    order: 0,
-  },
-  {
-    _id: "testimonial2",
-    name: "Jane Smith",
-    course: "Intermediate Course",
-    text: "The small class sizes and personalized attention helped me overcome my fear of speaking English. Now I feel confident in my communication skills.",
-    initials: "JS",
-    order: 1,
-  },
-  {
-    _id: "testimonial3",
-    name: "Robert Johnson",
-    course: "Advanced Course",
-    text: "Thanks to Innovative Centre, I was able to pass my English proficiency exam with flying colors. The instructors are knowledgeable and supportive.",
-    initials: "RJ",
-    order: 2,
-  },
-]
-
-// Client component for dynamic data fetching
-function CourseCard({ course }: { course: any }) {
-  const getGradient = (color: string) => {
-    switch (color) {
-      case "blue":
-        return "from-blue-400 to-blue-500"
-      case "green":
-        return "from-green-400 to-green-500"
-      case "purple":
-        return "from-purple-400 to-purple-500"
-      case "orange":
-        return "from-orange-400 to-orange-500"
-      case "red":
-        return "from-red-400 to-red-500"
-      case "teal":
-        return "from-teal-400 to-teal-500"
-      default:
-        return "from-blue-400 to-blue-500"
-    }
-  }
-
-  return (
-    <Card className="overflow-hidden rounded-xl border-0 shadow-lg">
-      <div className={`h-48 w-full bg-gradient-to-r ${getGradient(course.color)} flex items-center justify-center`}>
-        <BookOpen className="h-16 w-16 text-white" />
-      </div>
-      <CardContent className="p-8">
-        <h3 className="text-2xl font-bold text-gray-900">{course.title}</h3>
-        <p className="mt-3 text-gray-600">{course.description}</p>
-        <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 rounded-full">Learn More</Button>
-      </CardContent>
-    </Card>
-  )
-}
-
-function TestimonialCard({ testimonial }: { testimonial: any }) {
-  return (
-    <Card className="p-8 rounded-xl border border-gray-100 shadow-sm">
-      <div className="flex flex-col space-y-4">
-        <div className="flex items-center space-x-4">
-          <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-            <span className="text-lg font-bold text-blue-600">{testimonial.initials}</span>
-          </div>
-          <div>
-            <h3 className="text-lg font-bold text-gray-900">{testimonial.name}</h3>
-            <p className="text-sm text-gray-500">{testimonial.course}</p>
-          </div>
-        </div>
-        <p className="text-gray-600">{testimonial.text}</p>
-      </div>
-    </Card>
-  )
-}
+import { DynamicCourses } from "@/components/dynamic-courses"
+import { DynamicTestimonials } from "@/components/dynamic-testimonials"
 
 export default function Home() {
-  // Use fallback data for static rendering
-  const courses = FALLBACK_COURSES
-  const testimonials = FALLBACK_TESTIMONIALS
-
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -280,11 +169,9 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-12 md:grid-cols-3">
-              {courses.map((course) => (
-                <CourseCard key={course._id} course={course} />
-              ))}
-            </div>
+            <Suspense fallback={<p className="text-center py-12">Loading courses...</p>}>
+              <DynamicCourses />
+            </Suspense>
           </div>
         </section>
 
@@ -303,11 +190,9 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
-              {testimonials.map((testimonial) => (
-                <TestimonialCard key={testimonial._id} testimonial={testimonial} />
-              ))}
-            </div>
+            <Suspense fallback={<p className="text-center py-12">Loading testimonials...</p>}>
+              <DynamicTestimonials />
+            </Suspense>
           </div>
         </section>
 

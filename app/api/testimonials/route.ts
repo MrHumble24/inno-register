@@ -11,12 +11,17 @@ export async function GET(req: NextRequest) {
   try {
     const db = await connectToDatabase()
     if (!db) {
+      console.error("Database connection failed when fetching testimonials")
       return NextResponse.json([], { status: 200 })
     }
 
     const testimonials = await Testimonial.find({})
       .sort({ order: 1 })
-      .catch(() => [])
+      .catch((err) => {
+        console.error("Error querying testimonials:", err)
+        return []
+      })
+
     return NextResponse.json(testimonials)
   } catch (error) {
     console.error("Error fetching testimonials:", error)
@@ -33,13 +38,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    await connectToDatabase()
+    const db = await connectToDatabase()
+    if (!db) {
+      return NextResponse.json({ error: "Database connection failed" }, { status: 500 })
+    }
+
     const body = await req.json()
 
     const testimonial = await Testimonial.create(body)
 
     return NextResponse.json(testimonial, { status: 201 })
   } catch (error) {
+    console.error("Error creating testimonial:", error)
     return NextResponse.json({ error: "Failed to create testimonial" }, { status: 500 })
   }
 }
