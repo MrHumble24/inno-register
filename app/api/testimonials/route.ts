@@ -7,12 +7,18 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 // Get all testimonials
 export async function GET(req: NextRequest) {
   try {
-    await connectToDatabase()
-    const testimonials = await Testimonial.find({}).sort({ order: 1 })
+    const db = await connectToDatabase()
+    if (!db) {
+      return NextResponse.json([], { status: 200 })
+    }
 
+    const testimonials = await Testimonial.find({})
+      .sort({ order: 1 })
+      .catch(() => [])
     return NextResponse.json(testimonials)
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch testimonials" }, { status: 500 })
+    console.error("Error fetching testimonials:", error)
+    return NextResponse.json([], { status: 200 })
   }
 }
 

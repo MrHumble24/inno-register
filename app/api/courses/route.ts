@@ -7,12 +7,18 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route"
 // Get all courses
 export async function GET(req: NextRequest) {
   try {
-    await connectToDatabase()
-    const courses = await Course.find({}).sort({ order: 1 })
+    const db = await connectToDatabase()
+    if (!db) {
+      return NextResponse.json([], { status: 200 })
+    }
 
+    const courses = await Course.find({})
+      .sort({ order: 1 })
+      .catch(() => [])
     return NextResponse.json(courses)
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch courses" }, { status: 500 })
+    console.error("Error fetching courses:", error)
+    return NextResponse.json([], { status: 200 })
   }
 }
 

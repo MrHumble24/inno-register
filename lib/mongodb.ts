@@ -1,9 +1,9 @@
 import mongoose from "mongoose"
 
-const MONGODB_URI = process.env.MONGODB_URI!
+const MONGODB_URI = process.env.MONGODB_URI
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable")
+  console.warn("Please define the MONGODB_URI environment variable")
 }
 
 let cached = global.mongoose
@@ -22,16 +22,27 @@ async function connectToDatabase() {
       bufferCommands: false,
     }
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose
-    })
+    if (!MONGODB_URI) {
+      return null
+    }
+
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        return mongoose
+      })
+      .catch((error) => {
+        console.error("MongoDB connection error:", error)
+        return null
+      })
   }
 
   try {
     cached.conn = await cached.promise
   } catch (e) {
     cached.promise = null
-    throw e
+    console.error("Failed to connect to MongoDB:", e)
+    return null
   }
 
   return cached.conn

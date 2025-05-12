@@ -7,23 +7,35 @@ import { Card, CardContent } from "@/components/ui/card"
 import RegistrationForm from "@/components/registration-form"
 
 async function getCourses() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/courses`, {
-    next: { revalidate: 60 },
-  })
-  if (!res.ok) {
-    throw new Error("Failed to fetch courses")
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/courses`, {
+      next: { revalidate: 60 },
+      cache: "no-store",
+    })
+    if (!res.ok) {
+      return []
+    }
+    return res.json()
+  } catch (error) {
+    console.error("Error fetching courses:", error)
+    return []
   }
-  return res.json()
 }
 
 async function getTestimonials() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/testimonials`, {
-    next: { revalidate: 60 },
-  })
-  if (!res.ok) {
-    throw new Error("Failed to fetch testimonials")
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/testimonials`, {
+      next: { revalidate: 60 },
+      cache: "no-store",
+    })
+    if (!res.ok) {
+      return []
+    }
+    return res.json()
+  } catch (error) {
+    console.error("Error fetching testimonials:", error)
+    return []
   }
-  return res.json()
 }
 
 function CourseCard({ course }: { course: any }) {
@@ -80,8 +92,8 @@ function TestimonialCard({ testimonial }: { testimonial: any }) {
 }
 
 export default async function Home() {
-  const courses = await getCourses()
-  const testimonials = await getTestimonials()
+  const courses = (await getCourses()) || []
+  const testimonials = (await getTestimonials()) || []
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
