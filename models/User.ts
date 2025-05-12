@@ -24,16 +24,29 @@ const UserSchema = new mongoose.Schema({
 
 // Hash password before saving
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+  try {
+    if (!this.isModified("password")) {
+      return next()
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt)
     next()
+  } catch (error) {
+    console.error("Error hashing password:", error)
+    next(error as Error)
   }
-  const salt = await bcrypt.genSalt(10)
-  this.password = await bcrypt.hash(this.password, salt)
 })
 
 // Compare entered password with stored hash
 UserSchema.methods.matchPassword = async function (enteredPassword: string) {
-  return await bcrypt.compare(enteredPassword, this.password)
+  try {
+    return await bcrypt.compare(enteredPassword, this.password)
+  } catch (error) {
+    console.error("Error comparing passwords:", error)
+    return false
+  }
 }
 
+// Check if the model already exists to prevent overwriting
 export default mongoose.models.User || mongoose.model("User", UserSchema)

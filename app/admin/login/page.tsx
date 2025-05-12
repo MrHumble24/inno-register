@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { GraduationCap } from "lucide-react"
 
@@ -14,10 +14,28 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const router = useRouter()
-  const [email, setEmail] = useState("")
+  const searchParams = useSearchParams()
+  const [email, setEmail] = useState(process.env.ADMIN_EMAIL || "")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    // Check for error in URL
+    const errorParam = searchParams.get("error")
+    if (errorParam) {
+      switch (errorParam) {
+        case "CredentialsSignin":
+          setError("Invalid email or password")
+          break
+        case "SessionRequired":
+          setError("You need to be signed in to access this page")
+          break
+        default:
+          setError(`Authentication error: ${errorParam}`)
+      }
+    }
+  }, [searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
