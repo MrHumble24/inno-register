@@ -88,8 +88,8 @@ export function DynamicCourses() {
       <div className="text-center col-span-3">
         <p className="text-amber-600 mb-2">{error}</p>
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-4 md:grid-cols-3">
-          {courses.map((course) => (
-            <CourseCard key={course._id} course={course} getGradient={getGradient} />
+          {courses.map((course, index) => (
+            <CourseCard key={course._id} course={course} getGradient={getGradient} index={index} />
           ))}
         </div>
       </div>
@@ -101,22 +101,33 @@ export function DynamicCourses() {
       {courses.length === 0 ? (
         <p className="text-center col-span-3">No courses available at the moment. Check back soon!</p>
       ) : (
-        courses.map((course) => <CourseCard key={course._id} course={course} getGradient={getGradient} />)
+        courses.map((course, index) => (
+          <CourseCard key={course._id} course={course} getGradient={getGradient} index={index} />
+        ))
       )}
     </div>
   )
 }
 
-function CourseCard({ course, getGradient }: { course: any; getGradient: (color: string) => string }) {
+function CourseCard({
+  course,
+  getGradient,
+  index,
+}: { course: any; getGradient: (color: string) => string; index: number }) {
   return (
-    <Card className="overflow-hidden rounded-xl border-0 shadow-lg">
+    <Card
+      className={`overflow-hidden rounded-xl border-0 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-2 slide-up`}
+      style={{ animationDelay: `${index * 0.2}s` }}
+    >
       <div className={`h-48 w-full bg-gradient-to-r ${getGradient(course.color)} flex items-center justify-center`}>
-        <BookOpen className="h-16 w-16 text-white" />
+        <BookOpen className="h-16 w-16 text-white pulse" />
       </div>
       <CardContent className="p-8">
         <h3 className="text-2xl font-bold text-gray-900">{course.title}</h3>
         <p className="mt-3 text-gray-600">{course.description}</p>
-        <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 rounded-full">Learn More</Button>
+        <Button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 rounded-full transition-all duration-300 hover:scale-105">
+          Learn More
+        </Button>
       </CardContent>
     </Card>
   )

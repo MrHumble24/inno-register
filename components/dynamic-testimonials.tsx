@@ -67,8 +67,8 @@ export function DynamicTestimonials() {
       <div className="text-center col-span-3">
         <p className="text-amber-600 mb-2">{error}</p>
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-4 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((testimonial) => (
-            <TestimonialCard key={testimonial._id} testimonial={testimonial} />
+          {testimonials.map((testimonial, index) => (
+            <TestimonialCard key={testimonial._id} testimonial={testimonial} index={index} />
           ))}
         </div>
       </div>
@@ -80,15 +80,20 @@ export function DynamicTestimonials() {
       {testimonials.length === 0 ? (
         <p className="text-center col-span-3">No testimonials available at the moment. Check back soon!</p>
       ) : (
-        testimonials.map((testimonial) => <TestimonialCard key={testimonial._id} testimonial={testimonial} />)
+        testimonials.map((testimonial, index) => (
+          <TestimonialCard key={testimonial._id} testimonial={testimonial} index={index} />
+        ))
       )}
     </div>
   )
 }
 
-function TestimonialCard({ testimonial }: { testimonial: any }) {
+function TestimonialCard({ testimonial, index }: { testimonial: any; index: number }) {
   return (
-    <Card className="p-8 rounded-xl border border-gray-100 shadow-sm">
+    <Card
+      className={`p-8 rounded-xl border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1 slide-in-right`}
+      style={{ animationDelay: `${index * 0.2}s` }}
+    >
       <div className="flex flex-col space-y-4">
         <div className="flex items-center space-x-4">
           <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">

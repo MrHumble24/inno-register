@@ -1,11 +1,12 @@
 import Link from "next/link"
-import { ArrowRight, Globe, GraduationCap, Users } from "lucide-react"
+import { ArrowRight, Globe, GraduationCap, Users, ChevronDown } from "lucide-react"
 import { Suspense } from "react"
 
 import { Button } from "@/components/ui/button"
 import RegistrationForm from "@/components/registration-form"
 import { DynamicCourses } from "@/components/dynamic-courses"
 import { DynamicTestimonials } from "@/components/dynamic-testimonials"
+import { ScrollToTop } from "@/components/scroll-to-top"
 
 export default function Home() {
   return (
@@ -64,7 +65,7 @@ export default function Home() {
         <section className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-blue-50 via-white to-blue-50">
           <div className="container px-4 md:px-6">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col justify-center space-y-6">
+              <div className="flex flex-col justify-center space-y-6 fade-in">
                 <div className="space-y-4">
                   <div className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-600 font-medium">
                     Premium Language Education
@@ -93,8 +94,14 @@ export default function Home() {
                     </Link>
                   </Button>
                 </div>
+                <div className="flex justify-center mt-8">
+                  <Link href="#about" className="text-blue-600 flex flex-col items-center">
+                    <span className="text-sm mb-2">Learn More</span>
+                    <ChevronDown className="h-6 w-6 bounce" />
+                  </Link>
+                </div>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center slide-in-right">
                 <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white p-8 shadow-xl border border-gray-100">
                   <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-blue-100/50"></div>
                   <div className="absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-blue-100/50"></div>
@@ -107,7 +114,7 @@ export default function Home() {
 
         <section id="about" className="w-full py-16 md:py-24 lg:py-32 bg-white">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center slide-up">
               <div className="space-y-2">
                 <div className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-600 font-medium">
                   About Us
@@ -123,7 +130,10 @@ export default function Home() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-12 md:grid-cols-3">
-              <div className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md">
+              <div
+                className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md hover:-translate-y-1 slide-in-left"
+                style={{ animationDelay: "0.1s" }}
+              >
                 <div className="rounded-full bg-blue-100 p-3">
                   <GraduationCap className="h-6 w-6 text-blue-600" />
                 </div>
@@ -132,7 +142,10 @@ export default function Home() {
                   Learn from certified language instructors with years of teaching experience.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md">
+              <div
+                className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md hover:-translate-y-1 slide-in-left"
+                style={{ animationDelay: "0.3s" }}
+              >
                 <div className="rounded-full bg-blue-100 p-3">
                   <Globe className="h-6 w-6 text-blue-600" />
                 </div>
@@ -141,7 +154,10 @@ export default function Home() {
                   Our teaching approach combines traditional techniques with innovative digital tools.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md">
+              <div
+                className="flex flex-col items-center space-y-3 rounded-xl border border-gray-100 p-8 shadow-sm bg-white transition-all duration-200 hover:shadow-md hover:-translate-y-1 slide-in-left"
+                style={{ animationDelay: "0.5s" }}
+              >
                 <div className="rounded-full bg-blue-100 p-3">
                   <Users className="h-6 w-6 text-blue-600" />
                 </div>
@@ -156,7 +172,7 @@ export default function Home() {
 
         <section id="courses" className="w-full py-16 md:py-24 lg:py-32 bg-blue-50">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center slide-up">
               <div className="space-y-2">
                 <div className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-600 font-medium">
                   Our Courses
@@ -177,7 +193,7 @@ export default function Home() {
 
         <section id="testimonials" className="w-full py-16 md:py-24 lg:py-32 bg-white">
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center slide-up">
               <div className="space-y-2">
                 <div className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-600 font-medium">
                   Testimonials
@@ -199,7 +215,7 @@ export default function Home() {
         <section id="register" className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-br from-blue-600 to-blue-700">
           <div className="container px-4 md:px-6">
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col justify-center space-y-6">
+              <div className="flex flex-col justify-center space-y-6 slide-in-left">
                 <div className="space-y-3">
                   <div className="inline-block rounded-full bg-white/20 px-3 py-1 text-sm text-white font-medium">
                     Register Now
@@ -266,7 +282,7 @@ export default function Home() {
                   </li>
                 </ul>
               </div>
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center slide-in-right">
                 <div className="w-full max-w-md overflow-hidden rounded-2xl bg-white p-8 shadow-2xl">
                   <RegistrationForm />
                 </div>
@@ -294,6 +310,7 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      <ScrollToTop />
     </div>
   )
 }
