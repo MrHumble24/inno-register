@@ -7,6 +7,27 @@ import RegistrationForm from "@/components/registration-form"
 import { DynamicCourses } from "@/components/dynamic-courses"
 import { DynamicTestimonials } from "@/components/dynamic-testimonials"
 import { ScrollToTop } from "@/components/scroll-to-top"
+import { ImageCarousel } from "@/components/image-carousel"
+
+// Carousel images
+const carouselImages = [
+  {
+    src: "/images/classroom-1.png",
+    alt: "Students in a modern classroom setting",
+  },
+  {
+    src: "/images/classroom-2.png",
+    alt: "Teacher helping students with language exercises",
+  },
+  {
+    src: "/images/classroom-3.png",
+    alt: "Group of students practicing conversation skills",
+  },
+  {
+    src: "/images/classroom-4.png",
+    alt: "Student giving a presentation in English",
+  },
+]
 
 export default function Home() {
   return (
@@ -67,6 +88,10 @@ export default function Home() {
             <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 items-center">
               <div className="flex flex-col justify-center space-y-6 fade-in">
                 <div className="space-y-4">
+                  {/* Carousel added above the Premium Language Education text */}
+                  <div className="mb-6 h-[200px] md:h-[250px] lg:h-[300px] w-full rounded-2xl overflow-hidden shadow-lg">
+                    <ImageCarousel images={carouselImages} />
+                  </div>
                   <div className="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-600 font-medium">
                     Premium Language Education
                   </div>
@@ -112,6 +137,7 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Rest of the page content remains the same */}
         <section id="about" className="w-full py-16 md:py-24 lg:py-32 bg-white">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center slide-up">
